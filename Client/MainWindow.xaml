@@ -1,0 +1,87 @@
+﻿<Window x:Class="Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:Client.Converters"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <converter:PriceConverter x:Key="PriceConverter" />
+        <converter:TitleConverter x:Key="TitleConverter" />
+        <converter:PlaceholderVisibilityConverter x:Key="PlaceholderConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".3*"/>
+        </Grid.RowDefinitions>
+
+        <ListBox ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" x:Name="productsList">
+            <ListBox.ItemTemplate>
+                <DataTemplate >
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title, Converter={StaticResource TitleConverter}}"
+                                   FontSize="18" />
+
+                        <TextBlock Text="{Binding Price,Converter={StaticResource PriceConverter}}"
+                                   FontSize="18" />
+                    </StackPanel>                    
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Margin="5" x:Name="titleTB" Text="{Binding ProductTitle,
+                                                                UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center" Padding="5" FontSize="22" />
+            <TextBlock Margin="10" IsHitTestVisible="False"
+                       Text="Наименование" VerticalAlignment="Center"
+                       FontSize="22" Foreground="Gray"
+                       Visibility="{Binding ElementName=titleTB, Path=Text,
+                                            Converter={StaticResource PlaceholderConverter}}"/>
+            
+            <TextBox Grid.Column="1" Margin="5" Text="{Binding ProductPrice,
+                                                               UpdateSourceTrigger=PropertyChanged}"
+                     x:Name="priceTB"
+                     VerticalContentAlignment="Center" Padding="5" FontSize="22" />
+            <TextBlock Grid.Column="1" Margin="10" IsHitTestVisible="False"
+                       Text="Цена" VerticalAlignment="Center"
+                       FontSize="22" Foreground="Gray"
+                       Visibility="{Binding ElementName=priceTB, Path=Text,
+                                            Converter={StaticResource PlaceholderConverter}}"/>
+
+        </Grid>
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Add Product" Margin="5" FontSize="24" 
+                    Command="{Binding AddCommand}"/>
+            
+            <Button Content="Remove Product" Grid.Column="1" Margin="5" FontSize="24"
+                    Command="{Binding RemoveCommand}"/>
+            
+            <Button Content="Edit Product" Grid.Column="2" Margin="5" FontSize="24"
+                    Command="{Binding EditCommand}" Click="EditButtonClick"/>
+        </Grid>
+    </Grid>
+</Window>
