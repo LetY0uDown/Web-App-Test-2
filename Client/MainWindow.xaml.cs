@@ -7,9 +7,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        productsList.SelectionChanged += ProductsList_SelectionChanged;
     }
 
-    private void EditButtonClick(object sender, RoutedEventArgs e)
+    private void ProductsList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         productsList.Items.Refresh();
     }

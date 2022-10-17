@@ -1,5 +1,6 @@
 ﻿using Client.Core;
 using Models;
+using System.Linq;
 using MVVM_Classes;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -25,6 +26,11 @@ public sealed class MainViewModel : ObservableObject
             {
                 ProductTitle = value.Title;
                 ProductPrice = value.Price;
+            }
+            else
+            {
+                ProductTitle = string.Empty;
+                ProductPrice = decimal.Zero;
             }
 
             _selectedProduct = value;
@@ -79,21 +85,16 @@ public sealed class MainViewModel : ObservableObject
 
         EditCommand = new(async o =>
         {
-            Product product = new(ProductTitle, ProductPrice);
+            SelectedProduct.Price = ProductPrice;
+            SelectedProduct.Title = ProductTitle;
 
             var status = await DataProvider.PutAsync(SelectedProduct.Clone(), nameof(Product));
 
             if (status == System.Net.HttpStatusCode.OK)
-            {
-                SelectedProduct.Price = ProductPrice;
-                SelectedProduct.Title = ProductTitle;
-
                 ClearData();
-            }
             else
-            {
                 MessageBox.Show($"Cannot update product. Status code: {status}", "Operation failed");
-            }
+
         }, b => SelectedProduct is not null && !string.IsNullOrWhiteSpace(ProductTitle) && ProductPrice > decimal.Zero);
     }
 
@@ -104,7 +105,6 @@ public sealed class MainViewModel : ObservableObject
 
     private void ClearData()
     {
-        ProductTitle = string.Empty;
-        ProductPrice = decimal.Zero;
+        SelectedProduct = null;
     }
 }

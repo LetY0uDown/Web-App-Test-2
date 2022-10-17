@@ -26,7 +26,8 @@
             <RowDefinition Height=".3*"/>
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" x:Name="productsList">
+        <ListBox ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" 
+                 x:Name="productsList">
             <ListBox.ItemTemplate>
                 <DataTemplate >
                     <StackPanel>
@@ -81,7 +82,7 @@
                     Command="{Binding RemoveCommand}"/>
             
             <Button Content="Edit Product" Grid.Column="2" Margin="5" FontSize="24"
-                    Command="{Binding EditCommand}" Click="EditButtonClick"/>
+                    Command="{Binding EditCommand}" />
         </Grid>
     </Grid>
 </Window>
