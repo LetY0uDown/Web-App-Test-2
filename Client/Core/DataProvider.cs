@@ -18,7 +18,7 @@ internal static class DataProvider
 
     internal static async Task<T> GetAsync<T>(string controller)
     {
-        var requestString = Config.HOST + controller;
+        var requestString = Config.GetValue("host") + controller;
 
         var response = await _client.GetAsync(requestString);
 
@@ -31,7 +31,7 @@ internal static class DataProvider
 
     internal static async Task<HttpStatusCode> PostAsync<T>(T value, string controller)
     {
-        var requestString = Config.HOST + controller;
+        var requestString = Config.GetValue("host") + controller;
 
         var json = JsonSerializer.Serialize(value);
 
@@ -42,7 +42,7 @@ internal static class DataProvider
 
     internal static async Task<HttpStatusCode> PutAsync<T>(T value, string controller)
     {
-        var requestString = Config.HOST + controller;
+        var requestString = Config.GetValue("host") + controller;
 
         var json = JsonSerializer.Serialize(value);
 
@@ -53,7 +53,7 @@ internal static class DataProvider
 
     internal static async Task<HttpStatusCode> DeleteAsync(Guid id, string controller)
     {
-        var requestString = Config.HOST + controller + $"/{id}";
+        var requestString = Config.GetValue("host") + controller + $"/{id}";
 
         var answer = await _client.DeleteAsync(requestString);
 

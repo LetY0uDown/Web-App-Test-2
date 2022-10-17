@@ -34,7 +34,7 @@ namespace Server.Controllers
         {
             var product = await _dbContext.Products.FindAsync(id);
             _dbContext.Products.Remove(product);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(); 
 
             return Ok();
         }

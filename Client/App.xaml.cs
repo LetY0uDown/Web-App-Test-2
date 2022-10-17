@@ -1,5 +1,4 @@
-﻿using Client.Core;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Client;
 

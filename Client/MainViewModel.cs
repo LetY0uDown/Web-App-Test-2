@@ -38,12 +38,7 @@ public sealed class MainViewModel : ObservableObject
 
     public Command RemoveCommand { get; private set; }
     public Command AddCommand { get; private set; }
-    public Command EditCommand { get; private set; }
-
-    private async void SetProducts()
-    {
-        Products = await DataProvider.GetAsync<ObservableCollection<Product>>(nameof(Product));
-    }
+    public Command EditCommand { get; private set; }    
 
     private void InitCommands()
     {
@@ -57,24 +52,30 @@ public sealed class MainViewModel : ObservableObject
             {
                 Products.Add(product);
 
-                ProductTitle = string.Empty;
-                ProductPrice = decimal.Zero;
+                ClearData();
             }
             else
+            {
                 MessageBox.Show($"Cannot add product. Status code: {status}", "Operation failed");
-        },
-        b => !string.IsNullOrWhiteSpace(ProductTitle) && ProductPrice > decimal.Zero);
+            }
+        }, b => !string.IsNullOrWhiteSpace(ProductTitle) && ProductPrice > decimal.Zero);
 
         RemoveCommand = new(async o =>
         {
             var status = await DataProvider.DeleteAsync(SelectedProduct.ID, nameof(Product));
 
             if (status == System.Net.HttpStatusCode.OK)
+            {
                 Products.Remove(SelectedProduct);
+
+                ClearData();
+            }
             else
+            {
                 MessageBox.Show($"Cannot remove product. Status code: {status}", "Operation failed");
-        },
-        b => SelectedProduct is not null);
+            }
+
+        }, b => SelectedProduct is not null);
 
         EditCommand = new(async o =>
         {
@@ -87,12 +88,23 @@ public sealed class MainViewModel : ObservableObject
                 SelectedProduct.Price = ProductPrice;
                 SelectedProduct.Title = ProductTitle;
 
-                ProductTitle = string.Empty;
-                ProductPrice = decimal.Zero;
+                ClearData();
             }
             else
+            {
                 MessageBox.Show($"Cannot update product. Status code: {status}", "Operation failed");
-        },
-        b => SelectedProduct is not null && !string.IsNullOrWhiteSpace(ProductTitle) && ProductPrice > decimal.Zero);
+            }
+        }, b => SelectedProduct is not null && !string.IsNullOrWhiteSpace(ProductTitle) && ProductPrice > decimal.Zero);
+    }
+
+    private async void SetProducts()
+    {
+        Products = await DataProvider.GetAsync<ObservableCollection<Product>>(nameof(Product));
+    }
+
+    private void ClearData()
+    {
+        ProductTitle = string.Empty;
+        ProductPrice = decimal.Zero;
     }
 }
