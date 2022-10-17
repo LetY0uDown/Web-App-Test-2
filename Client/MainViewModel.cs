@@ -1,6 +1,5 @@
 ﻿using Client.Core;
 using Models;
-using System.Linq;
 using MVVM_Classes;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -44,7 +43,7 @@ public sealed class MainViewModel : ObservableObject
 
     public Command RemoveCommand { get; private set; }
     public Command AddCommand { get; private set; }
-    public Command EditCommand { get; private set; }    
+    public Command EditCommand { get; private set; }
 
     private void InitCommands()
     {
@@ -88,7 +87,7 @@ public sealed class MainViewModel : ObservableObject
             SelectedProduct.Price = ProductPrice;
             SelectedProduct.Title = ProductTitle;
 
-            var status = await DataProvider.PutAsync(SelectedProduct.Clone(), nameof(Product));
+            var status = await DataProvider.PutAsync(SelectedProduct, nameof(Product));
 
             if (status == System.Net.HttpStatusCode.OK)
                 ClearData();

@@ -2,7 +2,7 @@
 
 namespace Models;
 
-public class Product : ICloneable
+public class Product
 {
     [JsonConstructor]
     public Product() { }
@@ -20,14 +20,4 @@ public class Product : ICloneable
     public string Title { get; set; }
 
     public decimal Price { get; set; }
-
-    public object Clone()
-    {
-        return new Product
-        {
-            ID = ID,
-            Title = Title,
-            Price = Price
-        };
-    }
 }

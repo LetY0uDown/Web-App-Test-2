@@ -5,11 +5,11 @@ namespace Server.Services;
 
 public class DatabaseContext : DbContext
 {
-    private readonly ConfigurationSettings _configurationSettings;
+    private readonly ConfigurationSettings _config;
 
-    public DatabaseContext(ConfigurationSettings configurationSettings)
+    public DatabaseContext(ConfigurationSettings config)
     {
-        _configurationSettings = configurationSettings;
+        _config = config;
 
         Database.EnsureCreated();
     }
@@ -20,8 +20,8 @@ public class DatabaseContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.UseMySql(_configurationSettings.DBConnectionString,
-                                ServerVersion.AutoDetect(_configurationSettings.DBConnectionString));
+        optionsBuilder.UseMySql(_config.DBConnectionString,
+                                ServerVersion.AutoDetect(_config.DBConnectionString));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
